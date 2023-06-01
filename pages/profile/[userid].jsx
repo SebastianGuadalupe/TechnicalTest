@@ -5,10 +5,20 @@ import React from "react";
 import useSWR from "swr";
 import styles from "./profile.module.css";
 
-async function fetcher(userid) {
-	const { data: profile } = await axios(`http://localhost:3000/api/${userid}`);
-	return profile;
-}
+const fetcher = async (url) => {
+	const res = await fetch(url);
+
+	if (!res.ok) {
+		const error = new Error("An error occurred while fetching the data.");
+		// Attach extra info to the error object.
+		error.info = res;
+		error.status = res.status;
+		console.log(error);
+		throw error;
+	}
+	console.log(res);
+	return res.json();
+};
 
 const Profile = () => {
 	const router = useRouter();
@@ -24,7 +34,7 @@ const Profile = () => {
 		onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
 			console.log(error);
 			// Never retry on 404.
-			if (error.response.status === 404) {
+			if (error.status === 404) {
 				router.push(`/profile/notfound`);
 			}
 
@@ -42,7 +52,6 @@ const Profile = () => {
 	if (profileError) {
 		return <>Error</>;
 	}
-
 	const profile = data.profile;
 
 	const { name, location, picture } = profile.person;

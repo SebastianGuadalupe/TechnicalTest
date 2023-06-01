@@ -1,0 +1,54 @@
+.container {
+  text-align: center;
+}
+
+.profileImage {
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.skillsSection {
+  text-align: start;
+  padding: 0px 30px;
+}
+
+.badge {
+  align-items: center;
+	font-family: "Open Sans", Arial, Verdana, sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+  display: inline-block;
+  height: 100%;
+  white-space: nowrap;
+  width: auto;
+
+  position: relative;
+  border-radius: 100px;
+  line-height: 1;
+  overflow: hidden;
+  padding: 3px 12px;
+  margin: 1px 5px;
+  text-overflow: ellipsis;
+	line-height: 1.25rem;
+	color: #DADADA;
+  background: #373B41;
+  word-break: break-word;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  cursor: pointer;
+}
+
+.badge:hover {
+  background: #4b4d51;
+}
+
+.badge:active {
+  background: #2b2b2c;
+}
+
+.tryAgainButton {
+  line-height: 1.5;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+}

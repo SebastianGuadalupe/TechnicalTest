@@ -51,6 +51,7 @@
   line-height: 1.5;
   padding: 10px 25px;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .homeButton {
@@ -58,4 +59,5 @@
   line-height: 1.5;
   padding: 10px 25px;
   font-size: 1.5rem;
+  cursor: pointer;
 }

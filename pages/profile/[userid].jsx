@@ -1,60 +1,18 @@
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
-import useSWR from "swr";
 import styles from "./profile.module.css";
 
-const fetcher = async (url) => {
-	const res = await fetch(url);
+export async function getServerSideProps({ query: { userid } }) {
+	const res = await fetch(`https://bio.torre.co/api/bios/${userid}`);
+	const data = await res.json();
 
-	if (!res.ok) {
-		const error = new Error("An error occurred while fetching the data.");
-		// Attach extra info to the error object.
-		error.info = res;
-		error.status = res.status;
-		console.log(error);
-		throw error;
-	}
-	console.log(res);
-	return res.json();
-};
+	return { props: { profile: data } };
+}
 
-const Profile = () => {
-	const router = useRouter();
-	const {
-		query: { userid },
-	} = router;
-
-	const {
-		data,
-		error: profileError,
-		isLoading,
-	} = useSWR(`/profiles/${encodeURIComponent(String(userid))}`, fetcher, {
-		onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-			console.log(error);
-			// Never retry on 404.
-			if (error.status === 404) {
-				router.push(`/profile/notfound`);
-			}
-
-			// Only retry up to 10 times.
-			if (retryCount >= 10) return;
-
-			// Retry after 5 seconds.
-			setTimeout(() => revalidate({ retryCount }), 5000);
-		},
-	});
-
-	if (isLoading) {
-		return <div className="loader"></div>;
-	}
-	if (profileError) {
-		return <>Error</>;
-	}
-	const profile = data.profile;
-
+const Profile = ({ profile }) => {
 	const { name, location, picture } = profile.person;
+	const router = useRouter();
 	const skills = profile.strengths;
 	const expertSkills = [];
 	const proficientSkills = [];
@@ -99,7 +57,11 @@ const Profile = () => {
 						<h4>Expert Skills</h4>
 						{expertSkills.map((skill, i) => {
 							return (
-								<span className={styles.badge} key={i}>
+								<span
+									onClick={() => router.push(`/skill/${skill.name}`)}
+									className={styles.badge}
+									key={i}
+								>
 									{skill.name}
 								</span>
 							);
@@ -112,7 +74,11 @@ const Profile = () => {
 						<h4>Proficient Skills</h4>
 						{proficientSkills.map((skill, i) => {
 							return (
-								<span className={styles.badge} key={i}>
+								<span
+									onClick={() => router.push(`/skill/${skill.name}`)}
+									className={styles.badge}
+									key={i}
+								>
 									{skill.name}
 								</span>
 							);
@@ -125,7 +91,11 @@ const Profile = () => {
 						<h4>Novice Skills</h4>
 						{noviceSkills.map((skill, i) => {
 							return (
-								<span className={styles.badge} key={i}>
+								<span
+									onClick={() => router.push(`/skill/${skill.name}`)}
+									className={styles.badge}
+									key={i}
+								>
 									{skill.name}
 								</span>
 							);
@@ -138,7 +108,11 @@ const Profile = () => {
 						<h4>No experience but interested Skills</h4>
 						{interestSkills.map((skill, i) => {
 							return (
-								<span className={styles.badge} key={i}>
+								<span
+									onClick={() => router.push(`/skill/${skill.name}`)}
+									className={styles.badge}
+									key={i}
+								>
 									{skill.name}
 								</span>
 							);
@@ -146,6 +120,9 @@ const Profile = () => {
 					</div>
 				)}
 			</div>
+			<button className={styles.homeButton} onClick={() => router.push(`/`)}>
+				Home
+			</button>
 		</div>
 	);
 };

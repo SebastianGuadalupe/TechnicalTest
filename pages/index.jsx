@@ -37,6 +37,7 @@ export default function Home() {
 						className={styles.input}
 						value={inputValue}
 						onChange={handleChange}
+						placeholder="username"
 					/>
 					<input type="submit" className={styles.searchButton} value="Find" />
 				</form>
